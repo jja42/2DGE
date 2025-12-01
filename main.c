@@ -44,7 +44,7 @@ int main(int argc, char* argv[]) {
     }
 
     //Load Font
-    TTF_Font* font = TTF_OpenFont("/mnt/c/Windows/Fonts/arial.ttf", 24);
+    TTF_Font* font = TTF_OpenFont("assets/arial.ttf", 24);
     if (!font) {
     printf("Failed to load font: %s\n", TTF_GetError());
     }
@@ -53,7 +53,7 @@ int main(int argc, char* argv[]) {
     Game* game = init_game(ren);
 
     //Load our list of scenes
-    load_scene_manifest("scenes/scenes.json",game->scene_manager);
+    load_scene_manifest("assets/scenes/scenes.json",game->scene_manager);
 
     add_font(font, game->ui_manager);
 

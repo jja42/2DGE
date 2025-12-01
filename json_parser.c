@@ -48,6 +48,11 @@ char* read_json_into_buffer(char* filepath){
 }
 
 list_t* read_buffer_into_objects(char* buffer, bool is_substring){
+    if(buffer == NULL){
+        printf("NULL BUFFER.");
+        return NULL;
+    }
+    
     size_t length = strlen(buffer);
     
     //Check Length

@@ -1,0 +1,8 @@
+{
+  "scenes": [
+    {
+      "name": "start_scene",
+      "file": "assets/scenes/start_scene.json"
+    }
+  ]
+}
