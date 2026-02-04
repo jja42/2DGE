@@ -10,20 +10,15 @@ Config* init_config()
          printf("Failed to allocate Config.\n");
          return NULL;
     }
-    config->configuration = load_config();
+    config->configJSON = read_json_into_objects("assets/config/config.json");
     config->gameName = get_name_from_config(config);
     return config;
 }
 
-list_t* load_config()
-{
-    list_t* config = read_json_into_objects("assets/config/config.json");
-}
-
 char* get_name_from_config(Config* config)
 {
-    char* game = json_obj_get(config->configuration,"game_name")->value.s;
-    char* author = json_obj_get(config->configuration,"author_name")->value.s;
+    char* game = json_obj_get(config->configJSON,"game_name")->value.s;
+    char* author = json_obj_get(config->configJSON,"author_name")->value.s;
     int size = strlen(game) + strlen(author) + 4; //4 = " by "
     char name[size];
     strcat(name,game);
@@ -35,10 +30,10 @@ char* get_name_from_config(Config* config)
 
 void free_config(Config* config){
     free(config->gameName);
-    for(int i = 0; i<config->configuration->capacity; i++){
-        if(config->configuration->data[i] != NULL){
-            free_json(config->configuration->data[i]);
+    for(int i = 0; i<config->configJSON->capacity; i++){
+        if(config->configJSON->data[i] != NULL){
+            free_json(config->configJSON->data[i]);
         }
     }
-    free_list(config->configuration); 
+    free_list(config->configJSON); 
 }

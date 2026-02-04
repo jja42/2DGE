@@ -5,19 +5,17 @@
 #include "json_parser.h"
 
 typedef struct Config{
-list_t* configuration;
+list_t* configJSON;
 char* gameName;
 } Config;
 
-//initialize our config struct
+//initialize Config from JSON
 Config* init_config();
-
-//get data from our config json
-list_t* load_config();
 
 //return name from config
 char* get_name_from_config(Config* config);
 
+//frees list, json and gameName
 void free_config(Config* config);
 
 #endif
