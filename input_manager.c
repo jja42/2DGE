@@ -17,7 +17,7 @@ void bind_inputs(Input* input){
     
     input->input_bindings[ACTION_JUMP] = scancode_from_string(json_obj_get(buttons,"jump")->value.s);
 
-    input->input_bindings[ACTION_FIRE] = scancode_from_string(json_obj_get(buttons,"fire")->value.s);
+    input->input_bindings[ACTION_SHOOT] = scancode_from_string(json_obj_get(buttons,"shoot")->value.s);
 
     input->input_bindings[ACTION_MOVE_UP] = scancode_from_string(json_obj_get(buttons,"move_up")->value.s);
     

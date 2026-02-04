@@ -7,7 +7,7 @@
 
 typedef enum {
     ACTION_JUMP,
-    ACTION_FIRE,
+    ACTION_SHOOT,
     ACTION_MOVE_UP,
     ACTION_MOVE_DOWN,
     ACTION_MOVE_LEFT,

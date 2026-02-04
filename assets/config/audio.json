@@ -1,0 +1,11 @@
+{
+  "sounds": {
+    "jump": "assets/audio/jump.wav",
+    "shoot": "assets/audio/shoot.wav",
+    "click": "assets/audio/click.wav"
+  },
+  "music": {
+    "menu": "assets/audio/menu.ogg",
+    "start": "assets/audio/start.ogg"
+  }
+}

@@ -1,7 +1,7 @@
 {
     "buttons": {
             "jump": "z",
-            "fire": "x",
+            "shoot": "x",
             "move_up": "up",
             "move_down": "down",
             "move_left": "left",

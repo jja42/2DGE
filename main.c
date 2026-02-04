@@ -3,11 +3,13 @@
 #include <time.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 #include "game_manager.h"
 #include "ui_manager.h"
 #include "scene_manager.h"
 #include "config_manager.h"
 #include "input_manager.h"
+#include "audio_manager.h"
 
 int main(int argc, char* argv[]) {
 
@@ -23,6 +25,15 @@ int main(int argc, char* argv[]) {
         printf("SDL_Init Error: %s\n", SDL_GetError());
         return 1;
     }
+
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+        printf("SDL_mixer error: %s\n", Mix_GetError());
+        return false;
+    }
+
+    Mix_AllocateChannels(16);
+
+    Audio* audio = init_audio();
 
     char* gameName = config->gameName;
 
@@ -73,6 +84,8 @@ int main(int argc, char* argv[]) {
     SDL_Event e;
     const Uint8 * keys;
 
+    play_music(audio->music[MUSIC_MENU],.5f);
+
     //Game Loop
     while (running && game->mode != END) {
         SDL_PumpEvents();   // update SDL's internal event structures
@@ -100,9 +113,10 @@ int main(int argc, char* argv[]) {
         //Action Input Handling
         if(keys[input->input_bindings[ACTION_JUMP]]){
             printf("Jump Button Pressed.\n");
+            play_sound(audio->sounds[SOUND_JUMP],0,.5f,4);
         }
 
-        if(keys[input->input_bindings[ACTION_FIRE]]){
+        if(keys[input->input_bindings[ACTION_SHOOT]]){
             printf("Fire Button Pressed.\n");
         }
 
@@ -145,6 +159,10 @@ int main(int argc, char* argv[]) {
     free_config(config);
     free_input(input);
     free_game(game);
+    Mix_HaltChannel(-1);
+    Mix_CloseAudio();
+    free_audio(audio);
+    Mix_Quit();
     TTF_Quit();
     SDL_DestroyRenderer(ren);
     SDL_DestroyWindow(win);
