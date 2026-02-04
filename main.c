@@ -7,6 +7,7 @@
 #include "ui_manager.h"
 #include "scene_manager.h"
 #include "config_manager.h"
+#include "input_manager.h"
 
 int main(int argc, char* argv[]) {
 
@@ -14,6 +15,7 @@ int main(int argc, char* argv[]) {
     //because for some reason we have to seed to get ... unseeded results
     srand(time(NULL));
 
+    //Load Config
     Config* config = init_config();
 
     //Initialize SDL
@@ -54,6 +56,9 @@ int main(int argc, char* argv[]) {
     printf("Failed to load font: %s\n", TTF_GetError());
     }
 
+    //Init Input Manager
+    Input* input = init_input();
+
     //Init Game Manager
     Game* game = init_game(ren);
 
@@ -66,9 +71,13 @@ int main(int argc, char* argv[]) {
 
     bool running = true;
     SDL_Event e;
+    const Uint8 * keys;
 
     //Game Loop
     while (running && game->mode != END) {
+        SDL_PumpEvents();   // update SDL's internal event structures
+        keys = SDL_GetKeyboardState(NULL); // get the keyboard state for this frame
+
         while (SDL_PollEvent(&e)) {
             switch (e.type) {
                 //If we close out
@@ -87,6 +96,32 @@ int main(int argc, char* argv[]) {
                     break;
             }
         }
+
+        //Action Input Handling
+        if(keys[input->input_bindings[ACTION_JUMP]]){
+            printf("Jump Button Pressed.\n");
+        }
+
+        if(keys[input->input_bindings[ACTION_FIRE]]){
+            printf("Fire Button Pressed.\n");
+        }
+
+        if(keys[input->input_bindings[ACTION_MOVE_UP]]){
+            printf("Up Button Pressed.\n");
+        }
+
+        if(keys[input->input_bindings[ACTION_MOVE_DOWN]]){
+            printf("Down Button Pressed.\n");
+        }
+
+        if(keys[input->input_bindings[ACTION_MOVE_LEFT]]){
+            printf("Left Button Pressed.\n");
+        }
+
+        if(keys[input->input_bindings[ACTION_MOVE_RIGHT]]){
+            printf("Right Button Pressed.\n");
+        }
+
 
         //Set Background Color
         SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
@@ -108,6 +143,7 @@ int main(int argc, char* argv[]) {
 
     //Clean Up and Exit
     free_config(config);
+    free_input(input);
     free_game(game);
     TTF_Quit();
     SDL_DestroyRenderer(ren);

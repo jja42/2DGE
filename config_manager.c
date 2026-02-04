@@ -2,8 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-Config* init_config()
-{
+Config* init_config(){
     Config* config = malloc(sizeof(Config));
     //Handle Malloc Error
     if(config == NULL){
@@ -15,8 +14,7 @@ Config* init_config()
     return config;
 }
 
-char* get_name_from_config(Config* config)
-{
+char* get_name_from_config(Config* config){
     char* game = json_obj_get(config->configJSON,"game_name")->value.s;
     char* author = json_obj_get(config->configJSON,"author_name")->value.s;
     int size = strlen(game) + strlen(author) + 4; //4 = " by "
