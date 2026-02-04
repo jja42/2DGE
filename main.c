@@ -6,6 +6,7 @@
 #include "game_manager.h"
 #include "ui_manager.h"
 #include "scene_manager.h"
+#include "config_manager.h"
 
 int main(int argc, char* argv[]) {
 
@@ -13,14 +14,18 @@ int main(int argc, char* argv[]) {
     //because for some reason we have to seed to get ... unseeded results
     srand(time(NULL));
 
+    Config* config = init_config();
+
     //Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         printf("SDL_Init Error: %s\n", SDL_GetError());
         return 1;
     }
 
+    char* gameName = config->gameName;
+
     //Create SDL Window
-    SDL_Window* win = SDL_CreateWindow("NumSum",
+    SDL_Window* win = SDL_CreateWindow(gameName,
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
     if (!win) {
         printf("SDL_CreateWindow Error: %s\n", SDL_GetError());
@@ -102,6 +107,7 @@ int main(int argc, char* argv[]) {
     printf("Closing Game\n");
 
     //Clean Up and Exit
+    free_config(config);
     free_game(game);
     TTF_Quit();
     SDL_DestroyRenderer(ren);
