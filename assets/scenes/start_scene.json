@@ -42,10 +42,10 @@
     {
       "name": "Title",
       "x": 25, 
-      "y": 25 ,
+      "y": 100 ,
       "width": 750, 
-      "height": 50,
-      "text": "Num Sum",
+      "height": 100,
+      "text": "Welcome to 2DGE",
       "font": "ARIAL",
       "active": 1,
       "color": "GREEN"
@@ -56,7 +56,7 @@
       "y": 50 ,
       "width": 600,
       "height": 450,
-      "text": "____________________Info____________________\n\nNo Info To Display.\n\nThis is a valid Empty Project.",
+      "text": "____________________Info____________________\n\n\nWelcome to 2DGE. This is a Demo Project.\n\n\nClick play to see what's possible.\n\n\nFollow the documentation to make your own.",
       "font": "ARIAL",
       "active": 0,
       "color": "GREEN"
