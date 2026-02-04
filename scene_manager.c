@@ -49,34 +49,36 @@ void load_scene_objects(Scene* scene, list_t* scene_objects, Game* game){
     list_t* json_elements = NULL;
     JsonObj* json_obj = NULL;
     
+    //TO DO: ui-type field. use to distinguish and consolidate ui data loading
+
     //Load Buttons
     list_t* buttons = json_list_get(scene_objects,"buttons");
     if(buttons != NULL){
-        for(int i = 0; i<buttons->capacity; i++){
+        for(int i = 0; i<buttons->count; i++){
             if(buttons->data[i] != NULL){
                 //Button JSON
                 json_obj = (JsonObj*)buttons->data[i];
 
                 //Button JSON List
-                json_elements = (list_t*)json_obj->value;
+                json_elements = json_obj->value.objects;
 
-                char* name = (char*)json_obj_get(json_elements,"name")->value;
-                int* x = (int*)json_obj_get(json_elements,"x")->value;
-                int* y = (int*)json_obj_get(json_elements,"y")->value;
-                int* width = (int*)json_obj_get(json_elements,"width")->value;
-                int* height = (int*)json_obj_get(json_elements,"height")->value;
-                char* text = (char*)json_obj_get(json_elements,"text")->value;
-                char* font = (char*)json_obj_get(json_elements,"font")->value;
+                char* name = json_obj_get(json_elements,"name")->value.s;
+                int x = json_obj_get(json_elements,"x")->value.num;
+                int y = json_obj_get(json_elements,"y")->value.num;
+                int width = json_obj_get(json_elements,"width")->value.num;
+                int height = json_obj_get(json_elements,"height")->value.num;
+                char* text = json_obj_get(json_elements,"text")->value.s;
+                char* font = json_obj_get(json_elements,"font")->value.s;
                 FONT f = parse_font(font);
-                char* function = (char*)json_obj_get(json_elements,"function")->value;
+                char* function = json_obj_get(json_elements,"function")->value.s;
                 OnClick func = parse_button_function(function);
-                int* active = (int*)json_obj_get(json_elements,"active")->value;
-                char* color = (char*)json_obj_get(json_elements,"color")->value;
+                bool active = json_obj_get(json_elements,"active")->value.boolean;
+                char* color = json_obj_get(json_elements,"color")->value.s;
                 Color border_color = ui_get_color(color);
 
-                TextPanel* t = init_text_panel(*x,*y,*width,*height,text,f,game, border_color);
+                TextPanel* t = init_text_panel(x,y,width,height,text,f,game, border_color);
 
-                add_button_to_scene(name, t, func, game, *active);
+                add_button_to_scene(name, t, func, game, active);
             }
         }
     }
@@ -90,21 +92,21 @@ void load_scene_objects(Scene* scene, list_t* scene_objects, Game* game){
                 json_obj = (JsonObj*)text_panels->data[i];
 
                 //Tex Panel JSON List
-                json_elements = (list_t*)json_obj->value;
+                json_elements = json_obj->value.objects;
 
-                char* name = (char*)json_obj_get(json_elements,"name")->value;
-                int* x = (int*)json_obj_get(json_elements,"x")->value;
-                int* y = (int*)json_obj_get(json_elements,"y")->value;
-                int* width = (int*)json_obj_get(json_elements,"width")->value;
-                int* height = (int*)json_obj_get(json_elements,"height")->value;
-                char* text = (char*)json_obj_get(json_elements,"text")->value;
-                char* font = (char*)json_obj_get(json_elements,"font")->value;
+                char* name = json_obj_get(json_elements,"name")->value.s;
+                int x = json_obj_get(json_elements,"x")->value.num;
+                int y = json_obj_get(json_elements,"y")->value.num;
+                int width = json_obj_get(json_elements,"width")->value.num;
+                int height = json_obj_get(json_elements,"height")->value.num;
+                char* text = json_obj_get(json_elements,"text")->value.s;
+                char* font = json_obj_get(json_elements,"font")->value.s;
                 FONT f = parse_font(font);
-                int* active = (int*)json_obj_get(json_elements,"active")->value;
-                char* color = (char*)json_obj_get(json_elements,"color")->value;
+                bool active = json_obj_get(json_elements,"active")->value.boolean;
+                char* color = json_obj_get(json_elements,"color")->value.s;
                 Color border_color = ui_get_color(color);
 
-                add_text_panel_to_scene(name, *x, *y, *width, *height, text, f, game, *active, border_color);
+                add_text_panel_to_scene(name, x, y, width, height, text, f, game, active, border_color);
             }
         }
     }
@@ -172,7 +174,7 @@ void read_scene_manifest(list_t* manifest, SceneManager* manager){
             //Key = Scenes
             //Value = Array
             JsonObj* array = (JsonObj*) manifest->data[i];
-            list_t* array_elements = (list_t*)array->value;
+            list_t* array_elements = array->value.objects;
 
             char* scene_path = NULL;
 
@@ -195,12 +197,12 @@ void read_scene_manifest(list_t* manifest, SceneManager* manager){
                     //name : Name
                     //file : Filepath
                     JsonObj* json = (JsonObj*)array_elements->data[i];
-                    list_t* json_elements = (list_t*)json->value;
+                    list_t* json_elements = json->value.objects;
                     
                     JsonObj* object = json_obj_get(json_elements,"name");
-                    scene->name = strdup((char*)object->value);
+                    scene->name = strdup(object->value.s);
                     object = json_obj_get(json_elements,"file");
-                    scene_path = (char*)object->value;
+                    scene_path = object->value.s;
                 }
             scene->objects = read_json_into_objects(scene_path);
             list_add(manager->scenes,scene);
