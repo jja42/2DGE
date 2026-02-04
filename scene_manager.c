@@ -29,7 +29,7 @@ void load_scene(char* name, Game* game){
     SceneManager* manager  = game->scene_manager;
     list_t* scenes = manager->scenes;
 
-    for(int i = 0; i<scenes->capacity; i++){
+    for(int i = 0; i<scenes->count; i++){
         if(scenes->data[i] != NULL){
             Scene* scene = (Scene*)scenes->data[i];
             if(strcmp(scene->name, name) == 0){
@@ -86,7 +86,7 @@ void load_scene_objects(Scene* scene, list_t* scene_objects, Game* game){
     //Load Text Panels
     list_t* text_panels = json_list_get(scene_objects,"text_panels");
     if(text_panels != NULL){
-        for(int i = 0; i<text_panels->capacity; i++){
+        for(int i = 0; i<text_panels->count; i++){
             if(text_panels->data[i] != NULL){
                 //Text Panel JSON
                 json_obj = (JsonObj*)text_panels->data[i];
@@ -135,7 +135,7 @@ list_t* load_scene_file(char* filepath){
 
 
 void free_scenes(SceneManager* manager){
-    for(int i = 0; i<manager->scenes->capacity; i++){
+    for(int i = 0; i<manager->scenes->count; i++){
         if(manager->scenes->data[i] != NULL){
             free_scene(manager->scenes->data[i]);
         }
@@ -146,7 +146,7 @@ void free_scenes(SceneManager* manager){
 
 void free_scene(Scene* scene){
     free(scene->name);
-    for(int i = 0; i<scene->objects->capacity; i++){
+    for(int i = 0; i<scene->objects->count; i++){
         if(scene->objects->data[i] != NULL){
             free_json(scene->objects->data[i]);
         }
@@ -169,7 +169,7 @@ SceneManager* init_scene_management(){
 }
 
 void read_scene_manifest(list_t* manifest, SceneManager* manager){
-    for(int i = 0; i<manifest->capacity; i++){
+    for(int i = 0; i<manifest->count; i++){
         if(manifest->data[i] != NULL){
             //Key = Scenes
             //Value = Array
@@ -178,7 +178,7 @@ void read_scene_manifest(list_t* manifest, SceneManager* manager){
 
             char* scene_path = NULL;
 
-            for(int i = 0; i <array_elements->capacity; i++){
+            for(int i = 0; i <array_elements->count; i++){
                 Scene* scene = malloc(sizeof(Scene));
                 
                 //Handle Malloc Error

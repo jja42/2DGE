@@ -415,7 +415,7 @@ void free_json(JsonObj* obj){
     //we must loop through our list and free recursively
     if(obj->type == JSON || obj->type == J_ARRAY){
         list_t* l = (list_t*)obj->value.ptr;
-        for(int i = 0; i < l->capacity; i++){
+        for(int i = 0; i < l->count; i++){
             if(l->data[i] != NULL){
                 free_json(l->data[i]);
             }
