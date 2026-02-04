@@ -12,8 +12,7 @@ typedef enum {
 } SoundID;
 
 typedef enum {
-    MUSIC_MENU,
-    MUSIC_START,
+    MUSIC_MAIN,
     NUM_MUSIC
 } MusicID;
 
@@ -24,8 +23,7 @@ static const NameMap sound_map[] = {
 };
 
 static const NameMap music_map[] = {
-    { "menu", MUSIC_MENU },
-    { "start", MUSIC_START }
+    { "main_bgm", MUSIC_MAIN },
 };
 
 typedef struct Audio{

@@ -84,7 +84,7 @@ int main(int argc, char* argv[]) {
     SDL_Event e;
     const Uint8 * keys;
 
-    play_music(audio->music[MUSIC_MENU],.5f);
+    play_music(audio->music[MUSIC_MAIN],.5f);
 
     //Game Loop
     while (running && game->mode != END) {

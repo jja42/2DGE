@@ -5,7 +5,6 @@
     "click": "assets/audio/click.wav"
   },
   "music": {
-    "menu": "assets/audio/menu.ogg",
-    "start": "assets/audio/start.ogg"
+    "main_bgm": "assets/audio/main_bgm.ogg"
   }
 }
