@@ -39,10 +39,10 @@ Audio* init_audio();
 void load_audio();
 
 //define asset load for sounds
-void* load_sound_asset(const char* path);
+void* load_sound_asset(const char* path, void* ctx);
 
 //define asset load for music
-void* load_music_asset(const char* path);
+void* load_music_asset(const char* path, void* ctx);
 
 //play a sound on a specified channel, at a specified volume and with a specified number of loops
 void play_sound(Mix_Chunk *sound,int loops,float volume,int channel);

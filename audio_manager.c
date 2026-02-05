@@ -4,7 +4,7 @@ Audio* init_audio(){
     Audio* audio = malloc(sizeof(Audio));
     //Handle Malloc Error
     if(audio == NULL){
-         printf("Failed to allocate Config.\n");
+         printf("Failed to allocate Audio Manager.\n");
          return NULL;
     }
     audio->audioJSON = read_json_into_objects("assets/config/audio.json");
@@ -12,22 +12,22 @@ Audio* init_audio(){
     return audio;
 }
 
-void* load_sound_asset(const char* path) {
+void* load_sound_asset(const char* path, void* ctx) {
     return Mix_LoadWAV(path);
 }
 
-void* load_music_asset(const char* path) {
+void* load_music_asset(const char* path, void* ctx) {
     return Mix_LoadMUS(path);
 }
 
 void load_audio(Audio* audio){
     list_t* sounds = json_list_get(audio->audioJSON,"sounds");
 
-    load_asset_table((void**)audio->sounds,NUM_SOUNDS,sound_map,sounds,load_sound_asset,"sound");
+    load_asset_table((void**)audio->sounds,NUM_SOUNDS,sound_map,sounds,load_sound_asset,NULL,"sound");
 
     list_t* music = json_list_get(audio->audioJSON,"music");
 
-    load_asset_table((void**)audio->music,NUM_MUSIC,music_map,music,load_music_asset,"music");
+    load_asset_table((void**)audio->music,NUM_MUSIC,music_map,music,load_music_asset,NULL,"music");
 }
 
 void play_sound(Mix_Chunk *sound,int loops,float volume,int channel)
@@ -78,4 +78,5 @@ void free_audio(Audio* audio)
         }
     }
     free_list(audio->audioJSON); 
+    free(audio);
 }

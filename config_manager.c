@@ -6,7 +6,7 @@ Config* init_config(){
     Config* config = malloc(sizeof(Config));
     //Handle Malloc Error
     if(config == NULL){
-         printf("Failed to allocate Config.\n");
+         printf("Failed to allocate Config Manager.\n");
          return NULL;
     }
     config->configJSON = read_json_into_objects("assets/config/config.json");
@@ -34,4 +34,5 @@ void free_config(Config* config){
         }
     }
     free_list(config->configJSON); 
+    free(config);
 }

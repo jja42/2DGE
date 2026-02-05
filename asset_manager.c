@@ -7,6 +7,7 @@ void load_asset_table(
     const NameMap* map,
     list_t* json,
     AssetLoadFn loader,
+    void* ctx,
     const char* asset_type_name
 ) {
     for (int i = 0; i < json->capacity; i++) {
@@ -22,7 +23,7 @@ void load_asset_table(
             continue;
         }
 
-        asset_table[id] = loader(path);
+        asset_table[id] = loader(path, ctx);
         if (!asset_table[id]) {
             printf("Failed to load %s '%s' (%s)\n",
                 asset_type_name, name, path);

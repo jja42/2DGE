@@ -4,14 +4,19 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_image.h>
 #include "game_manager.h"
 #include "ui_manager.h"
 #include "scene_manager.h"
 #include "config_manager.h"
 #include "input_manager.h"
 #include "audio_manager.h"
+#include "graphics_manager.h"
 
 int main(int argc, char* argv[]) {
+
+    int WINDOW_HEIGHT = 600;
+    int WINDOW_WIDTH = 800;
 
     //initialize our randomness
     //because for some reason we have to seed to get ... unseeded results
@@ -26,20 +31,27 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+    //Initialize SDL Image
+    int imgFlags = IMG_INIT_PNG | IMG_INIT_JPG;
+    if (!(IMG_Init(imgFlags) & imgFlags)) {
+        printf("SDL_image error: %s\n", IMG_GetError());
+        return false;
+    }
+
+    //initialize SDL Mixer
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) < 0) {
         printf("SDL_mixer error: %s\n", Mix_GetError());
         return false;
     }
 
-    Mix_AllocateChannels(16);
-
-    Audio* audio = init_audio();
-
-    char* gameName = config->gameName;
+    Mix_AllocateChannels(32);
+    Mix_Volume(-1, MIX_MAX_VOLUME / 2);
+    Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
 
     //Create SDL Window
-    SDL_Window* win = SDL_CreateWindow(gameName,
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
+    //Use GameName from Config
+    SDL_Window* win = SDL_CreateWindow(config->gameName,
+        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
     if (!win) {
         printf("SDL_CreateWindow Error: %s\n", SDL_GetError());
         SDL_Quit();
@@ -66,6 +78,12 @@ int main(int argc, char* argv[]) {
     if (!font) {
     printf("Failed to load font: %s\n", TTF_GetError());
     }
+
+    //Init Audio Manager
+    Audio* audio = init_audio();
+
+    //Init Graphics Manager
+    Graphics* graphics = init_graphics(ren);
 
     //Init Input Manager
     Input* input = init_input();
@@ -143,6 +161,11 @@ int main(int argc, char* argv[]) {
         //Clear what has been rendered
         SDL_RenderClear(ren);
 
+        //render the background
+        SDL_Texture* bg = graphics->backgrounds[BACKGROUND_MAIN];
+        SDL_Rect dst = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT }; // fill window
+        SDL_RenderCopy(ren, bg, NULL, &dst);
+
         //Render our Entities
         render_entities(game);
 
@@ -156,14 +179,19 @@ int main(int argc, char* argv[]) {
     printf("Closing Game\n");
 
     //Clean Up and Exit
+    Mix_HaltChannel(-1);
+    Mix_HaltMusic();
+
+    free_audio(audio);
+    free_graphics(graphics);
     free_config(config);
     free_input(input);
     free_game(game);
-    Mix_HaltChannel(-1);
+
     Mix_CloseAudio();
-    free_audio(audio);
     Mix_Quit();
     TTF_Quit();
+    IMG_Quit();
     SDL_DestroyRenderer(ren);
     SDL_DestroyWindow(win);
     SDL_Quit();

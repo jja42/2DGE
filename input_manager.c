@@ -4,7 +4,7 @@ Input* init_input(){
     Input* input = malloc(sizeof(Input));
     //Handle Malloc Error
     if(input == NULL){
-         printf("Failed to allocate Config.\n");
+         printf("Failed to allocate Input Manager.\n");
          return NULL;
     }
     input->inputJSON = read_json_into_objects("assets/config/input.json");
@@ -44,4 +44,5 @@ void free_input(Input* input)
         }
     }
     free_list(input->inputJSON); 
+    free(input);
 }

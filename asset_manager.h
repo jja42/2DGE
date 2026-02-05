@@ -4,7 +4,7 @@
 #include "list.h"
 #include "json_parser.h"
 
-typedef void* (*AssetLoadFn)(const char* path);
+typedef void* (*AssetLoadFn)(const char* path, void* ctx);
 
 typedef struct {
     const char* name;
@@ -18,6 +18,7 @@ void load_asset_table(
     const NameMap* map,
     list_t* json,
     AssetLoadFn loader,
+    void* ctx,
     const char* asset_type_name
 );
 

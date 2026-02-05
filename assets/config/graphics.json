@@ -1,0 +1,16 @@
+{
+    "sprites": {
+        "player_idle": "assets/graphics/player_idle.png",
+        "player_run": "assets/graphics/player_run.png",
+        "player_projectile": "assets/graphics/player_projectile.png",
+        "enemy": "assets/graphics/enemy.png",
+        "enemy_projectile": "assets/graphics/enemy_projectile.png",
+        "platform": "assets/graphics/platform.png"
+    },
+    "images": {
+        "banner": "assets/graphics/banner.jpg"
+    },
+    "backgrounds":{
+        "main_background": "assets/graphics/main_background.jpg"
+    }
+}
